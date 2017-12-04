@@ -1,5 +1,5 @@
-VERSION:=$(shell if [ -d .git ]; then bash -c 'gitversion.sh | grep "^MAJOR=" | cut -d = -f 2'; else source version.sh && echo $$MAJOR ; fi)
-RELEASE:=$(shell if [ -d .git ]; then bash -c 'gitversion.sh | grep "^BUILD=" | cut -d = -f 2'; else source version.sh && echo $$BUILD ; fi)
+VERSION:=$(shell if [ -d .git ] && [ -e gitversion.sh ]; then bash -c 'gitversion.sh | grep "^MAJOR=" | cut -d = -f 2'; else source version.sh &> /dev/null && echo $$MAJOR ; fi)
+RELEASE:=$(shell if [ -d .git ] && [ -e gitversion.sh ]; then bash -c 'gitversion.sh | grep "^BUILD=" | cut -d = -f 2'; else source version.sh &> /dev/null && echo $$BUILD ; fi)
 DISTFILE=./dist/cmdarg-$(VERSION)-$(RELEASE).tar.gz
 SPECFILE=cmdarg.spec
 ifndef RHEL_VERSION
@@ -15,7 +15,7 @@ RPM=cmdarg-$(VERSION)-$(RHEL_RELEASE).noarch.rpm
 RHEL_DISTFILE=./dist/cmdarg-$(VERSION)-$(RHEL_RELEASE).tar.gz
 
 ifndef PREFIX
-	PREFIX=''
+	PREFIX=
 endif
 
 DISTFILE_DEPS=$(shell find . -type f | grep -Ev '\.git|\./dist/|$(DISTFILE)')
@@ -68,7 +68,7 @@ uninstall:
 
 install:
 	mkdir -p $(PREFIX)/usr/lib
-	install ./cmdarg.sh $(PREFIX)/usr/lib/cmdarg.sh
+	install ./cmdarg.sh $(PREFIX)/usr/local/lib/cmdarg.sh
 
 MANIFEST:
 	echo /usr/lib/cmdarg.sh > MANIFEST
