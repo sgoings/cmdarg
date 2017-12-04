@@ -63,11 +63,11 @@ $(RHEL_DISTFILE): $(DISTFILE)
 	mock --verbose -r epel-$(RHEL_VERSION)-noarch ./dist/$(SRPM) --resultdir ./dist/ --define "version $(VERSION)" --define "release $(RHEL_RELEASE)"
 
 uninstall:
-	rm -f $(PREFIX)/usr/lib/cmdarg.sh
+	rm -f $(PREFIX)/usr/local/lib/cmdarg.sh
 
 
 install:
-	mkdir -p $(PREFIX)/usr/lib
+	mkdir -p $(PREFIX)/usr/local/lib
 	install ./cmdarg.sh $(PREFIX)/usr/local/lib/cmdarg.sh
 
 MANIFEST:
